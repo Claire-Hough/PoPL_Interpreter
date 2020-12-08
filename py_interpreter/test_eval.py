@@ -4,8 +4,8 @@ from py_parser import *
 
 class TestEvaluation(unittest.TestCase):
     def program_test(self, code, expected_env):
-        tokens = imp_lex(code)
-        result = imp_parse(tokens)
+        tokens = py_lex(code)
+        result = py_parse(tokens)
         self.assertNotEquals(None, result)
         program = result.value
         env = {}

@@ -7,11 +7,16 @@ def usage():
     sys.exit(1)
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        usage()
-    filename = sys.argv[1]
+#    if len(sys.argv) != 2:
+#        usage()
+#    filename = sys.argv[1]
+    filename = 'hello.py'
     text = open(filename).read()
     tokens = py_lex(text)
+
+    for t in tokens:
+        print(t)
+
     parse_result = py_parse(tokens)
     if not parse_result:
         sys.stderr.write('Parse error!\n')

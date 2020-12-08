@@ -20,8 +20,11 @@ def parser():
 
 # Statements
 def stmt_list():
-    separator = keyword(';') ^ (lambda x: lambda l, r: CompoundStatement(l, r))
+    #---------------------------- NEEDS WORK --------------------------------------------------------
+    separator = keyword('\n') ^ (lambda x: lambda l, r: CompoundStatement(l, r))
+    print(separator)
     return Exp(stmt(), separator)
+    #return stmt()
 
 def stmt():
     return assign_stmt() | \
