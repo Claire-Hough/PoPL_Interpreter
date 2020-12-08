@@ -22,9 +22,7 @@ def parser():
 def stmt_list():
     #---------------------------- NEEDS WORK --------------------------------------------------------
     separator = keyword('\n') ^ (lambda x: lambda l, r: CompoundStatement(l, r))
-    print(separator)
     return Exp(stmt(), separator)
-    #return stmt()
 
 def stmt():
     return assign_stmt() | \
