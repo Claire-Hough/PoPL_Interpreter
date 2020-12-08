@@ -21,7 +21,7 @@ def parser():
 # Statements
 def stmt_list():
     #---------------------------- NEEDS WORK --------------------------------------------------------
-    separator = keyword('\n') ^ (lambda x: lambda l, r: CompoundStatement(l, r))
+    separator = keyword(';') ^ (lambda x: lambda l, r: CompoundStatement(l, r))
     return Exp(stmt(), separator)
 
 def stmt():

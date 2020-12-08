@@ -11,6 +11,7 @@ def lex(characters, token_exprs):
             regex = re.compile(pattern)
             match = regex.match(characters, pos)
             if match:
+                sys.stderr.write("match with %s\n"  % characters[pos])
                 text = match.group(0)
                 if tag:
                     token = (text, tag)

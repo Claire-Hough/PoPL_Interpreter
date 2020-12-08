@@ -19,7 +19,7 @@ if __name__ == '__main__':
 
     parse_result = py_parse(tokens)
     if not parse_result:
-        sys.stderr.write('Parse error!\n')
+        sys.stderr.write('Parse error! with %s\n' % parse_result)
         sys.exit(1)
     ast = parse_result.value
     env = {}

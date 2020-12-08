@@ -3,17 +3,21 @@ import lexer
 RESERVED = 'RESERVED'
 INT      = 'INT'
 ID       = 'ID'
-
 token_exprs = [
+    (r'[ \n]+',                None),
     (r'[ \t]+',                None),
-    (r'#[^\n]*',               None),
-    #(r'/\*([^*]|[\r\n]|(\*([^/]|[\r\n])))*\*/',               None),
+    # (r'#[^\n]*',               None),
+    (r'#[A-Za-z][A-Za-z0-9_]*[\n]',             None),
+    (r'#[A-Za-z][A-Za-z0-9_]*',             None),
+    (r'#\s[A-Za-z][A-Za-z0-9_]*[\n]',             None),
+    (r'#\s[A-Za-z][A-Za-z0-9_]*',             None),
+    (r'#(\s[A-Za-z][A-Za-z0-9_])*',             None),
     (r'^\n',                   None),
     (r'=',                     RESERVED),
     (r'\(',                    RESERVED),
     (r'\)',                    RESERVED),
     (r':',                     RESERVED),
-    #(r';',                     RESERVED),
+    (r';',                     RESERVED),
     (r'\+',                    RESERVED),
     (r'-',                     RESERVED),
     (r'\*',                    RESERVED),
@@ -37,7 +41,7 @@ token_exprs = [
     #(r'end',                   RESERVED),
     (r'[0-9]+',                INT),
     (r'[A-Za-z][A-Za-z0-9_]*', ID),
-    (r'\n',                    RESERVED),
+    (r'\n',                    None)
 ]
 
 def py_lex(characters):
