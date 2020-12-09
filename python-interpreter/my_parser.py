@@ -14,18 +14,23 @@ class ParserState(object):
         
 pg = ParserGenerator(
     # A list of all token names, accepted by the parser.
-    ['NUMBER', 'VARIABLE', 'OPEN_PARENS', 'CLOSE_PARENS',
+    ['NUMBER', 'VARIABLE', 'STRING', 'OPEN_PARENS', 'CLOSE_PARENS',
      'PLUS', 'MINUS', 'MUL', 'DIV', 'MOD', 'POWER', 'EQUALS',
-     'LESS_THAN', 'GREATER_THAN', 'EQUAL_TO', 'LESS_OR_EQUAL', 
+     'LESS_THAN', 'GREATER_THAN', 'EQUAL_TO', 'LESS_OR_EQUAL',
      'GREATER_OR_EQUAL', 'AND', 'OR', 'NOT', 'IN', 'FOR', 'WHILE',
-     'RANGE', 'IF', 'ELIF', 'ELSE', 'PRINT', 'STR', 'INT'
+     'RANGE', 'IF', 'ELIF', 'ELSE', 'PRINT', 'STR', 'INT', 
+     'NOT_EQUAL_TO', 'NEW_LINE', 'SUB_ASSIGNMENT', 'ADD_ASSIGNMENT', 'BOOLEAN'
     ],
     # A list of precedence rules with ascending precedence, to
     # disambiguate ambiguous production rules.
     precedence=[
         ('left', ['EQUALS']), 
-        ('left', ['PLUS', 'MINUS']),
-        ('left', ['MUL', 'DIV'])
+        ('left', ['IF', 'ELSE', 'ELIF', 'WHILE', 'FOR', 'NEW_LINE',]),
+        ('left', ['AND', 'OR',]),
+        ('left', ['NOT',]),
+        ('left', ['EQUAL_TO', 'NOT_EQUAL_TO', 'GREATER_OR_EQUAL','GREATER_THAN', 'LESS_THAN', 'LESS_OR_EQUAL',]),
+        ('left', ['PLUS', 'MINUS', 'SUB_ASSIGNMENT', 'ADD_ASSIGNMENT,']),
+        ('left', ['MUL', 'DIV', 'MOD', 'POWER',])
     ]
 )
 
@@ -38,11 +43,20 @@ def statement_assignment(state, p):
 #     right = p[2]
 #     return Variable(left, right)
 
+@pg.production('expression : BOOLEAN')
+def expression_boolean(state, p):
+    # p is a list of the pieces matched by the right hand side of the rule
+    return Boolean(True if p[0].getstr() == 'true' else False)
+
 @pg.production('expression : NUMBER')
 def expression_number(p):
     # p is a list of the pieces matched by the right hand side of the
     # rule
     return Number(int(p[0].getstr()))
+
+@pg.production('expression : STRING')
+def expression_string(state, p):
+    return String(p[0].getstr().strip('"\''))
 
 @pg.production('expression : OPEN_PARENS expression CLOSE_PARENS')
 def expression_parens(p):
@@ -73,7 +87,48 @@ def expression_binop(p):
     else:
         raise AssertionError('Oops, this should not be possible!')
 
-# @pg.production('expression : expression LESS_THAN expression')
-# def 
+@pg.production('expression : expression NOT_EQUAL_TO expression')
+@pg.production('expression : expression EQUAL_TO expression')
+@pg.production('expression : expression GREATER_OR_EQUAL expression')
+@pg.production('expression : expression LESS_OR_EQUAL expression')
+@pg.production('expression : expression GREATER_THAN expression')
+@pg.production('expression : expression LESS_THAN expression')
+@pg.production('expression : expression AND expression')
+@pg.production('expression : expression OR expression')
+def expression_equality(state, p):
+    left = p[0]
+    right = p[2]
+    check = p[1]
+    
+    if check.gettokentype() == 'EQUAL_TO':
+        return Equal(left, right)
+    elif check.gettokentype() == 'NOT_EQUAL_TO':
+        return NotEqual(left, right)
+    elif check.gettokentype() == 'GREATER_OR_EQUAL':
+        return GreaterThanEqual(left, right)
+    elif check.gettokentype() == 'LESS_OR_EQUAL':
+        return LessThanEqual(left, right)
+    elif check.gettokentype() == 'GREATER_THAN':
+        return GreaterThan(left, right)
+    elif check.gettokentype() == 'LESS_THAN':
+        return LessThan(left, right)
+    elif check.gettokentype() == 'AND':
+        return And(left, right)
+    elif check.gettokentype() == 'OR':
+        return Or(left, right)
+    else:
+        raise LogicError("Shouldn't be possible")
+
+@pg.error
+def error_handler(state, token):
+    # we print our state for debugging porpoises
+    #print token
+    pos = token.getsourcepos()
+    if pos:
+        raise UnexpectedTokenError(token.gettokentype())
+    elif token.gettokentype() == '$end':
+        raise UnexpectedEndError()
+    else:
+        raise UnexpectedTokenError(token.gettokentype())
 
 parser = pg.build()
