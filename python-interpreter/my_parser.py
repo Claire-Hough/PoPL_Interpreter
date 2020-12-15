@@ -1,6 +1,7 @@
 from rply import ParserGenerator
 from my_ast import *
 from errors import *
+from my_lexer import *
 
 class ParserState(object):
     def __init__(self, filename):
@@ -14,20 +15,25 @@ class ParserState(object):
         
 pg = ParserGenerator(
     # A list of all token names, accepted by the parser.
-    ['NUMBER', 'VARIABLE', 'STRING', 'OPEN_PARENS', 'CLOSE_PARENS',
-     'PLUS', 'MINUS', 'MUL', 'DIV', 'MOD', 'POWER', 'EQUALS',
-     'LESS_THAN', 'GREATER_THAN', 'EQUAL_TO', 'LESS_OR_EQUAL',
-     'GREATER_OR_EQUAL', 'AND', 'OR', 'NOT', 'IN', 'FOR', 'WHILE',
-     'RANGE', 'IF', 'ELIF', 'ELSE', 'PRINT', 'STR', 'INT', 
-     'NOT_EQUAL_TO', 'NEW_LINE', 'SUB_ASSIGNMENT', 'ADD_ASSIGNMENT', 'BOOLEAN'
+    # ['NUMBER', 'VARIABLE', 'STRING', 'OPEN_PARENS', 'CLOSE_PARENS',
+    #  'PLUS', 'MINUS', 'MUL', 'DIV', 'MOD', 'POWER', 'EQUALS',
+    #  'LESS_THAN', 'GREATER_THAN', 'EQUAL_TO', 'LESS_OR_EQUAL',
+    #  'GREATER_OR_EQUAL', 'AND', 'OR', 'NOT', 'IN', 'FOR', 'WHILE',
+    #  'RANGE', 'IF', 'ELIF', 'ELSE', 'PRINT', 'STR', 'INT', 
+    #  'NOT_EQUAL_TO', 'NEW_LINE', 'SUB_ASSIGNMENT', 'ADD_ASSIGNMENT', 'BOOLEAN'
+    # ],
+    ['NUMBER', 'VARIABLE', 'PLUS', 'MINUS', 'MUL', 'DIV', 'MOD', 'POWER', 'EQUALS',
+    'STRING', 'OPEN_PARENS', 'CLOSE_PARENS','BOOLEAN', 'LESS_THAN', 'GREATER_THAN', 
+    'EQUAL_TO', 'LESS_OR_EQUAL', 'NOT_EQUAL_TO',
+    'LESS_THAN', 'GREATER_THAN', 'EQUAL_TO', 'LESS_OR_EQUAL', 'OR', 'AND', 'GREATER_OR_EQUAL'
     ],
     # A list of precedence rules with ascending precedence, to
     # disambiguate ambiguous production rules.
     precedence=[
         ('left', ['EQUALS']), 
-        ('left', ['IF', 'ELSE', 'ELIF', 'WHILE', 'FOR', 'NEW_LINE',]),
+        #('left', ['IF', 'ELSE', 'ELIF', 'WHILE', 'FOR', 'NEW_LINE',]),
         ('left', ['AND', 'OR',]),
-        ('left', ['NOT',]),
+        #('left', ['NOT',]),
         ('left', ['EQUAL_TO', 'NOT_EQUAL_TO', 'GREATER_OR_EQUAL','GREATER_THAN', 'LESS_THAN', 'LESS_OR_EQUAL',]),
         ('left', ['PLUS', 'MINUS', 'SUB_ASSIGNMENT', 'ADD_ASSIGNMENT,']),
         ('left', ['MUL', 'DIV', 'MOD', 'POWER',])
@@ -132,3 +138,9 @@ def error_handler(state, token):
         raise UnexpectedTokenError(token.gettokentype())
 
 parser = pg.build()
+
+# state = ParserState()
+
+# def parse(code, state=state):
+#     result = parser.parse(lexer.lex(code),state)
+#     return result
