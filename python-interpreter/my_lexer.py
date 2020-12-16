@@ -4,10 +4,11 @@ lg = LexerGenerator()
 
 #Basic Lex stuffs
 lg.add('NUMBER', r'\d+')
-# lg.add('STRING', r'[a-zA-Z][a-zA-Z0-9_]*')
+# lg.add('STRING', r'[a-zA-Z][a-zA-Z0-9\s]*')
 # lg.add('VARIABLE', r'STRING')
 #lg.add('DIGIT', r'[0-9]')
 lg.add('COMMENT', r'#[a-zA-Z0-9\s]*')
+lg.add('PRINT', r'print')
 
 #Operators
 lg.add('POWER', r'\*\*')

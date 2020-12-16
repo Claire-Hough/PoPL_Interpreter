@@ -39,3 +39,4 @@ print()
 
 # Print Statement
 # print("Print Statement: print('This is a test')")
+# print(parser.parse(lexer.lex("print('This is a test')")).eval())
