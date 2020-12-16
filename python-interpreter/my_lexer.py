@@ -15,7 +15,7 @@ lg.add('MINUS', r'-')
 lg.add('MUL', r'\*')
 lg.add('DIV', r'/')
 lg.add('MOD', r'%')
-lg.add('EQUALS', r'=')
+# lg.add('EQUALS', r'=')
 
 #Formatting
 #lg.add('COLON', r':')
@@ -24,12 +24,12 @@ lg.add('CLOSE_PARENS', r'\)')
 #lg.add('NEW_LINE', r'\n')
 
 #Comparison
+lg.add('LESS_OR_EQUAL', r'<=')
+lg.add('GREATER_OR_EQUAL', r'>=')
 lg.add('LESS_THAN', r'<')
 lg.add('GREATER_THAN', r'>')
 lg.add('EQUAL_TO', r'==')
 lg.add('NOT_EQUAL_TO', r'!=')
-lg.add('LESS_OR_EQUAL', r'<=')
-lg.add('GREATER_OR_EQUAL', r'>=')
 # lg.add('AND', r'and')
 # lg.add('OR', r'or')
 # lg.add('NOT', r'not')
