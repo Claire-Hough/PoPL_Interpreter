@@ -6,7 +6,7 @@ pg = ParserGenerator(
     ['NUMBER', 'OPEN_PARENS', 'CLOSE_PARENS',
      'PLUS', 'MINUS', 'MUL', 'DIV', 'MOD', 'POWER',
      'LESS_THAN', 'GREATER_THAN', 'EQUAL_TO', 'LESS_OR_EQUAL',
-     'GREATER_OR_EQUAL', 'NOT_EQUAL_TO'
+     'GREATER_OR_EQUAL', 'NOT_EQUAL_TO', 'COMMENT'
     #  'VARIABLE', 'STRING',  'EQUALS',
     #  'AND', 'OR', 'NOT', 'IN', 'FOR', 'WHILE',
     #  'RANGE', 'IF', 'ELIF', 'ELSE', 'PRINT', 'STR', 'INT', 
@@ -20,6 +20,10 @@ pg = ParserGenerator(
         ('left', ['MUL', 'DIV', 'MOD', 'POWER'])
     ]
 )
+
+@pg.production('expression : COMMENT')
+def expression_comment(p):
+    return Comment(p[0].getstr())
 
 @pg.production('expression : NUMBER')
 def expression_number(p):
