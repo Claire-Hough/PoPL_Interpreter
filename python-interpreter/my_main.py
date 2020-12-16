@@ -32,7 +32,10 @@ print(parser.parse(lexer.lex('1 != 3')).eval())
 print()
 
 # Comments
-print("Comment: '# test'")
-print(parser.parse(lexer.lex('# test')).eval())
+print("Comment: '# This is a test'")
+print(parser.parse(lexer.lex('# This is a test')).eval())
+print("(Returns nothing because it is ignored)")
 print()
 
+# Print Statement
+# print("Print Statement: print('This is a test')")

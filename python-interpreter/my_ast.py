@@ -1,5 +1,12 @@
 from rply.token import BaseBox
 
+class Comment(BaseBox):
+    def __init__(self, value):
+        self.value = value
+
+    def eval(self):
+        pass
+
 class Number(BaseBox):
     def __init__(self, value):
         self.value = value
@@ -43,7 +50,7 @@ class Equal(BinaryOp):
         return 'Equal(%s, %s)' % (self.left.rep(), self.right.rep())
     
     def eval(self):
-        return self.left.eval().equals(self.right.eval())
+        return self.left.eval() == self.right.eval()
 
 class NotEqual(BinaryOp):
     
@@ -51,9 +58,7 @@ class NotEqual(BinaryOp):
         return 'NotEqual(%s, %s)' % (self.left.rep(), self.right.rep())
     
     def eval(self):
-        result = self.left.eval().equals(self.right.eval())
-        result.value = not result.value
-        return result
+        return self.left.eval() != self.right.eval()
 
 class GreaterThanEqual(BinaryOp):
     
