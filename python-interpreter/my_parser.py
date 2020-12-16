@@ -4,13 +4,20 @@ from my_ast import *
 pg = ParserGenerator(
     # A list of all token names, accepted by the parser.
     ['NUMBER', 'OPEN_PARENS', 'CLOSE_PARENS',
-     'PLUS', 'MINUS', 'MUL', 'DIV'
+     'PLUS', 'MINUS', 'MUL', 'DIV', 'MOD', 'POWER',
+     'LESS_THAN', 'GREATER_THAN', 'EQUAL_TO', 'LESS_OR_EQUAL',
+     'GREATER_OR_EQUAL', 'NOT_EQUAL_TO'
+    #  'VARIABLE', 'STRING',  'EQUALS',
+    #  'AND', 'OR', 'NOT', 'IN', 'FOR', 'WHILE',
+    #  'RANGE', 'IF', 'ELIF', 'ELSE', 'PRINT', 'STR', 'INT', 
+    #  'NEW_LINE', 'SUB_ASSIGNMENT', 'ADD_ASSIGNMENT', 'BOOLEAN'
     ],
     # A list of precedence rules with ascending precedence, to
     # disambiguate ambiguous production rules.
     precedence=[
+        ('left', ['EQUAL_TO', 'NOT_EQUAL_TO', 'GREATER_OR_EQUAL', 'LESS_OR_EQUAL', 'GREATER_THAN', 'LESS_THAN']),
         ('left', ['PLUS', 'MINUS']),
-        ('left', ['MUL', 'DIV'])
+        ('left', ['MUL', 'DIV', 'MOD', 'POWER'])
     ]
 )
 
@@ -28,17 +35,56 @@ def expression_parens(p):
 @pg.production('expression : expression MINUS expression')
 @pg.production('expression : expression MUL expression')
 @pg.production('expression : expression DIV expression')
+@pg.production('expression : expression MOD expression')
+@pg.production('expression : expression POWER expression')
 def expression_binop(p):
     left = p[0]
     right = p[2]
-    if p[1].gettokentype() == 'PLUS':
+    operator = p[1]
+    if operator.gettokentype() == 'PLUS':
         return Add(left, right)
-    elif p[1].gettokentype() == 'MINUS':
+    elif operator.gettokentype() == 'MINUS':
         return Sub(left, right)
-    elif p[1].gettokentype() == 'MUL':
+    elif operator.gettokentype() == 'MUL':
         return Mul(left, right)
-    elif p[1].gettokentype() == 'DIV':
+    elif operator.gettokentype() == 'DIV':
         return Div(left, right)
+    elif operator.gettokentype() == 'MOD':
+        return Mod(left, right)
+    elif operator.gettokentype() == 'POWER':
+        return Power(left, right)
+    else:
+        raise AssertionError('Oops, this should not be possible!')
+
+@pg.production('expression : expression NOT_EQUAL_TO expression')
+@pg.production('expression : expression EQUAL_TO expression')
+@pg.production('expression : expression GREATER_OR_EQUAL expression')
+@pg.production('expression : expression LESS_OR_EQUAL expression')
+@pg.production('expression : expression GREATER_THAN expression')
+@pg.production('expression : expression LESS_THAN expression')
+# @pg.production('expression : expression AND expression')
+# @pg.production('expression : expression OR expression')
+def expression_equality(p):
+    left = p[0]
+    right = p[2]
+    check = p[1]
+    
+    if check.gettokentype() == 'EQUAL_TO':
+        return Equal(left, right)
+    elif check.gettokentype() == 'NOT_EQUAL_TO':
+        return NotEqual(left, right)
+    elif check.gettokentype() == 'GREATER_OR_EQUAL':
+        return GreaterThanEqual(left, right)
+    elif check.gettokentype() == 'LESS_OR_EQUAL':
+        return LessThanEqual(left, right)
+    elif check.gettokentype() == 'GREATER_THAN':
+        return GreaterThan(left, right)
+    elif check.gettokentype() == 'LESS_THAN':
+        return LessThan(left, right)
+    # elif check.gettokentype() == 'AND':
+    #     return And(left, right)
+    # elif check.gettokentype() == 'OR':
+    #     return Or(left, right)
     else:
         raise AssertionError('Oops, this should not be possible!')
 
