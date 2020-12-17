@@ -31,10 +31,6 @@ def expression_comment(p):
     return Comment(p[0].getstr())
     # can change this to not return at all if we want
 
-@pg.production('expression : PRINT OPEN_PARENS expression CLOSE_PARENS')
-def expression_print(p):
-    return Print(p[2].getstr())
-
 @pg.production('expression : NUMBER')
 def expression_number(p):
     # p is a list of the pieces matched by the right hand side of the
@@ -48,6 +44,11 @@ def expression_string(p):
 @pg.production('expression : OPEN_PARENS expression CLOSE_PARENS')
 def expression_parens(p):
     return p[1]
+
+@pg.production('expression : PRINT OPEN_PARENS STRING CLOSE_PARENS')
+@pg.production('expression : PRINT OPEN_PARENS NUMBER CLOSE_PARENS')
+def expression_print(p):
+    print(str(p[2].getstr()))
 
 @pg.production('expression : expression PLUS expression')
 @pg.production('expression : expression MINUS expression')

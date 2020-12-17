@@ -44,9 +44,9 @@ print()
 
 # Assignment Operators
 print("String:")
-print(parser.parse(lexer.lex("Here is a string")).eval())
+print(parser.parse(lexer.lex("'Here is a string'")).eval())
 print()
 
 # Print Statement
-# print("Print Statement: print('This is a test')")
-# print(parser.parse(lexer.lex("print('This is a test')")).eval())
+print("Print Statement: print('This is a test')")
+parser.parse(lexer.lex("print('This is a test')"))
