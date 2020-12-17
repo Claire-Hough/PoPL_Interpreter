@@ -48,5 +48,7 @@ print()
 # print()
 
 # Print Statement
-print("Print Statement: print('This is a test')")
-parser.parse(lexer.lex("print('This is a test')"))
+print("Print String: print('This is 1 test')")
+parser.parse(lexer.lex("print('This is 1 test')"))
+print("Print Number: print(12)")
+parser.parse(lexer.lex("print(12)"))
