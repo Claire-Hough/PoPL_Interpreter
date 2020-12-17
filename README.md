@@ -11,7 +11,7 @@ This interpreter can parse:
 - conditional statements (<, <=, >, >=, ==, !=)
 - comments (#)
 - identifying strings and numbers
-- print function (print('test')) (print(12))
+- support output operation (print function)
 
 # How to Run
 This program is run via the "my_main.py" file.\
