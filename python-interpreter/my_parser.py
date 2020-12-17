@@ -1,12 +1,15 @@
 from rply import ParserGenerator
+from rply.token import BaseBox, Token
 from my_ast import *
+import os
 
 pg = ParserGenerator(
     # A list of all token names, accepted by the parser.
     ['NUMBER', 'OPEN_PARENS', 'CLOSE_PARENS',
      'PLUS', 'MINUS', 'MUL', 'DIV', 'MOD', 'POWER',
      'LESS_THAN', 'GREATER_THAN', 'EQUAL_TO', 'LESS_OR_EQUAL',
-     'GREATER_OR_EQUAL', 'NOT_EQUAL_TO', 'COMMENT', 'PRINT'
+     'GREATER_OR_EQUAL', 'NOT_EQUAL_TO', 'COMMENT', 'PRINT',
+     'IDENTIFIER', 'ASSIGNMENT', 'STRING'
     #  'VARIABLE', 'STRING',  'EQUALS',
     #  'AND', 'OR', 'NOT', 'IN', 'FOR', 'WHILE',
     #  'RANGE', 'IF', 'ELIF', 'ELSE', 'PRINT', 'STR', 'INT', 
@@ -15,11 +18,13 @@ pg = ParserGenerator(
     # A list of precedence rules with ascending precedence, to
     # disambiguate ambiguous production rules.
     precedence=[
+        ('left', ['ASSIGNMENT']),
         ('left', ['EQUAL_TO', 'NOT_EQUAL_TO', 'GREATER_OR_EQUAL', 'LESS_OR_EQUAL', 'GREATER_THAN', 'LESS_THAN']),
         ('left', ['PLUS', 'MINUS']),
         ('left', ['MUL', 'DIV', 'MOD', 'POWER'])
     ]
 )
+
 
 @pg.production('expression : COMMENT')
 def expression_comment(p):
@@ -35,6 +40,10 @@ def expression_number(p):
     # p is a list of the pieces matched by the right hand side of the
     # rule
     return Number(int(p[0].getstr()))
+
+@pg.production('expression : STRING')
+def expression_string(p):
+    return String(p[0].getstr().strip('"\''))
 
 @pg.production('expression : OPEN_PARENS expression CLOSE_PARENS')
 def expression_parens(p):
@@ -96,5 +105,11 @@ def expression_equality(p):
     #     return Or(left, right)
     else:
         raise AssertionError('Oops, this should not be possible!')
+
+@pg.production('expression : IDENTIFIER ASSIGNMENT expression')
+def expression_binop(p):
+    left = p[0]
+    right = p[2]
+    return Assignment(Variable(left.getstr()), right)
 
 parser = pg.build()

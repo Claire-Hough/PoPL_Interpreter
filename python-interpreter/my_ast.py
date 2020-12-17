@@ -14,6 +14,32 @@ class Number(BaseBox):
     def eval(self):
         return self.value
 
+class String(BaseBox):
+    def __init__(self, value):
+        self.value = str(value)
+
+    def eval(self):
+        return self.value
+
+
+class Variable(BaseBox):
+    def __init__(self, name):
+        self.name = str(name)
+        self.value = None
+
+    def getname(self):
+        return str(self.name)
+
+    def eval(self, value):
+        if self.name.eval():
+            return self.value
+        else:
+            return None
+
+    def to_string(self):
+        return str(self.name)
+
+
 class BinaryOp(BaseBox):
     def __init__(self, left, right):
         self.left = left
@@ -43,6 +69,17 @@ class Power(BinaryOp):
     def eval(self):
         return self.left.eval() ** self.right.eval()
 
+
+# class Assignment(BinaryOp):  
+#     def eval(self):
+#           if env.variables.get(self.left.getname(), None):
+              
+#     def eval(self, env):
+#         if isinstance(self.left,Variable):
+        
+#             if env.variables.get(self.left.getname(), None) is None:
+#                 env.variables[self.left.getname()] = self.right
+#                 return self.right.eval(env)
 
 class Equal(BinaryOp):
     

@@ -16,6 +16,11 @@ print("Power: 2 ** 3 =")
 print(parser.parse(lexer.lex('2 ** 3')).eval())
 print()
 
+# Assignment Operators
+# print("Assignment: x = 2; x =")
+# print(parser.parse(lexer.lex('x = 2')).eval())
+# print()
+
 # Conditional Statements
 print("Less Than: 1 < 3 =")
 print(parser.parse(lexer.lex('1 < 3')).eval())
@@ -35,6 +40,11 @@ print()
 print("Comment: '# This is a test'")
 print(parser.parse(lexer.lex('# This is a test')).eval())
 print("(Returns nothing because it is ignored)")
+print()
+
+# Assignment Operators
+print("String:")
+print(parser.parse(lexer.lex("Here is a string")).eval())
 print()
 
 # Print Statement
