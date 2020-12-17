@@ -45,6 +45,19 @@ def expression_string(p):
 def expression_parens(p):
     return p[1]
 
+@pg.production('statement : expression')
+def statement_expr(p):
+    return p[0]
+
+@pg.production('expression : IDENTIFIER ASSIGNMENT expression')
+def statement_assignment(p):
+    left = p[0].getstr()
+    right = p[2]
+    check = p[1]
+    var = Variable(left, right)
+    return Assignment(Variable(var))
+
+
 @pg.production('expression : PRINT OPEN_PARENS STRING CLOSE_PARENS')
 @pg.production('expression : PRINT OPEN_PARENS NUMBER CLOSE_PARENS')
 def expression_print(p):
@@ -106,11 +119,5 @@ def expression_equality(p):
     #     return Or(left, right)
     else:
         raise AssertionError('Oops, this should not be possible!')
-
-@pg.production('expression : IDENTIFIER ASSIGNMENT expression')
-def expression_binop(p):
-    left = p[0]
-    right = p[2]
-    return Assignment(Variable(left.getstr()), right)
 
 parser = pg.build()

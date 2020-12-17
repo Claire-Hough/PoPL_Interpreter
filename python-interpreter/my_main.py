@@ -39,12 +39,12 @@ print()
 
 # String
 print("String:")
-print(parser.parse(lexer.lex("'Here is a string'")).eval())
+print(parser.parse(lexer.lex("'Charmander got bitten!'")).eval())
 print()
 
 # Assignment Operators
-# print("Assignment: x = 2; x =")
-# print(parser.parse(lexer.lex('x = 2')).eval())
+# print("Assignment: x = 110; x =")
+# print(parser.parse(lexer.lex('charmender_HP = 110')).eval())
 # print()
 
 # Print Statement

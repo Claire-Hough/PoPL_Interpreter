@@ -23,19 +23,23 @@ class String(BaseBox):
 
 
 class Variable(BaseBox):
+
+    # self.variables = {}
+    
     def __init__(self, name):
         self.name = str(name)
-        self.value = None
-
+        self.value = value
+        
     def getname(self):
         return str(self.name)
 
     def eval(self):
         self.variables = {}
-        if variables.get(self.name, None) is not None:
-            self.value = variables[self.name].eval()
-            return self.value
-    
+        self.variables.append(str(self.name))
+        # if variables.get(self.name, value) is not None:
+        self.value = variables[self.name].eval()
+        return self.value
+       
     def to_string(self):
         return str(self.name)
 
@@ -70,14 +74,19 @@ class Power(BinaryOp):
         return self.left.eval() ** self.right.eval()
 
 
-class Assignment(BinaryOp):   
+class Assignment(BinaryOp):  
+    # def eval(self, env):
+    #     if isinstance(self.left,Variable):
+        
+    #         if env.variables.get(self.left.getname(), None) is None:
+    #             env.variables[self.left.getname()] = self.right
+    #             return self.right.eval(env)
     def eval(self):
-        if isinstance(self.left, Variable):
-            self.variables = {}
-            if variables.get(self.left.getname(), None) is None:
-                variables[self.left.getname()] = self.right
+        if isinstance(self.left):
+            if Variable.variables.get(self.left.getname(), None) is None:
+                Variable.variables[self.left.getname()] = self.right
                 return self.right.eval()
-
+            
 
 class Equal(BinaryOp):
     
