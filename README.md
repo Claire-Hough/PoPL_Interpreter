@@ -3,9 +3,21 @@
 - Sarah McLaughlin
 - Sarah Sherman
 
+# Description
+This project is an interpreter for Python written in Python.\
+Examples are printed to the console from "my_main.py".\
+This interpreter can parse:
+- arithmetic operators (+, -, *, /, %, ^)
+- conditional statements (<, <=, >, >=, ==, !=)
+- comments (#)
+- identifying strings and numbers
+- print function (print('test')) (print(12))
+
 # How to Run
-1. Check to see that you have maven installed.
-2. Open your command prompt and navigate to the root folder of the project. (This is where you can see the src folder, but are not IN the src folder)
-3. Run the command: mvn clean install
-4. Once the build is successful, run the command: java -jar .\target\PoplInterpreter-1.0-SNAPSHOT.jar
-5. You should see the string "running", which is just my test printout
+This program is run via the "my_main.py" file.\
+No args are taken in; example inputs are hard-coded.\
+\
+pip install rply\
+python3 my_main.py\
+OR\
+./my_main.py
